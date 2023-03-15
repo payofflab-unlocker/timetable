@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Countdown Timer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" referrerpolicy="no-referrer" />
+    <style>
+        .video-container iframe {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120%; height: 120%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body data-timestamp-init="2023-03-15 20:00:00" class="flex items-center justify-center h-screen bg-black" >
+    <div class="video-container fixed top-0 left-0 w-full h-full z-0 overflow-hidden z-0">
+        <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/Y1qQZbTF8iQ?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&autohide=1"></iframe>
+        <div class="bg-black absolute top-0 left-0 w-full h-full opacity-50 z-1"></div>
+    </div>
+    <div class="w-lg mx-auto text-white rounded-lg p-8 relative z-2">
+        <h1 data-timestamp-hide="0" class="text-2xl font-bold mb-2 text-center">강의 시작까지...</h1>
+        <div class="text-5xl font-bold mb-8 text-center" data-timestamp-time></div>
+        <div class="text-start">
+            <div class="mb-4 timetable" data-timestamp-highlight="0">
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="text-sm font-bold">오후 8:00:00</div>
+                    <div class="text-sm font-bold text-right">진행 : 김승우 대표</div>
+                </div>
+                인트로
+            </div>
+            <div class="mb-4 timetable" data-timestamp-highlight="10">
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="text-sm font-bold">오후 8:10:00</div>
+                    <div class="text-sm font-bold text-right">진행 : 장현민 대표</div>
+                </div>
+                ㅁㄴㅇㅁㄴㅇㄴㅁㅇ
+            </div>
+            <div class="mb-4 timetable" data-timestamp-highlight="30">
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="text-sm font-bold">오후 8:30:00</div>
+                    <div class="text-sm font-bold text-right">진행 : 최원 대표</div>
+                </div>
+                ㅁㄴㅇㅁㄴㅇㄴㅁㅇ
+            </div>
+            <div class="mb-4 timetable" data-timestamp-highlight="50">
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="text-sm font-bold">오후 8:50:00</div>
+                    <div class="text-sm font-bold text-right">진행 : 당시소 님</div>
+                </div>
+                ㅁㄴㅇㄴㅁㅇㄴㅁㅇ
+            </div>
+            <div class="mb-4 timetable" data-timestamp-highlight="70">
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="text-sm font-bold">오후 9:10:00</div>
+                    <div class="text-sm font-bold text-right">진행 : 김승우 대표</div>
+                </div>
+                질문과 답변 - QnA
+            </div>
+            <div class="mb-4 timetable" data-timestamp-highlight="90">
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="text-sm font-bold">오후 9:30:00</div>
+                    <div class="text-sm font-bold text-right">진행 : 김승우 대표</div>
+                </div>
+                언락 프로젝트 소개
+            </div>
+            <div class="mb-4 timetable" data-timestamp-highlight="100">
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="text-sm font-bold">오후 9:40:00</div>
+                    <div class="text-sm font-bold text-right">진행 : 김승우 대표</div>
+                </div>
+                언락 무료특강 소개 및 접수
+            </div>
+            <div class="mb-4 timetable" data-timestamp-highlight="120">
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="text-sm font-bold">오후 10:00:00</div>
+                    <div class="text-sm font-bold text-right">-</div>
+                </div>
+                강의 종료
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/locale/ko.min.js"></script>
+    <script>
+        function countdown$fromnow(deadline) {
+            let currentDiff = moment().diff(deadline);
+            let diffTime = moment.duration(currentDiff);
+            let hours = Math.abs(diffTime.hours()).toString().padStart(2, '0');
+            let minutes = Math.abs(diffTime.minutes()).toString().padStart(2, '0');
+            let seconds = Math.abs(diffTime.seconds()).toString().padStart(2, '0');
+            if(currentDiff < 0) {
+                return `${hours}:${minutes}:${seconds}`
+            } else {
+                return `${hours}:${minutes}:${seconds}`
+            }
+        }
+        (function countdown() {
+            Array.from(document.querySelectorAll('[data-timestamp-init]')).map(el=>{
+                const init = moment(el.dataset.timestampInit);
+                Array.from(el.querySelectorAll('[data-timestamp-time]')).map(el=>el.textContent = countdown$fromnow(init));
+                Array.from(el.querySelectorAll('[data-timestamp-hide]')).map(el=>moment().diff(init, 'minutes') > parseInt(el.dataset.timestampHide || 0) && el.classList.add('hidden'));
+                // Array.from(el.querySelectorAll('[data-timestamp-highlight]')).map(el=>el.classList.toggle('opacity-50', moment().diff(init, 'minutes') < parseInt(el.dataset.timestampHighlight || 0)));
+            })
+            countdown.timer = clearTimeout(countdown.timer);
+            countdown.timer = setTimeout(countdown, 1000);;
+        })();
+    </script>
+</body>
+</html>
